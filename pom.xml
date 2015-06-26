@@ -1,0 +1,111 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.infrared5.rtmpbee</groupId>
+  <artifactId>rtmpbee</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>rtmpbee</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
+        <configuration>
+          <compilerVersion>1.6</compilerVersion>
+          <fork>true</fork>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+            </manifest>
+            <manifestEntries>
+              <SCM-Revision>${buildNumber}</SCM-Revision>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>2.3.7</version>
+        <extensions>true</extensions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <repositories>
+    <!-- red5 repository for maven artifact -->
+    <repository>
+      <id>Red5</id>
+      <url>http://red5.googlecode.com/svn/repository</url>
+    </repository>
+    <repository>
+      <id>springsource-repo</id>
+      <name>SpringSource Repository</name>
+      <url>http://repo.springsource.org/release</url>
+    </repository>
+    <repository>
+      <id>repo1.maven.org</id>
+      <url>http://repo1.maven.org/maven2</url>
+    </repository>
+    <repository>
+      <id>maven2-repository.dev.java.net</id>
+      <url>http://download.java.net/maven/2</url>
+    </repository>
+    <repository>
+      <id>opensymphony-releases</id>
+      <name>Opensymphony Releases</name>
+      <url>https://oss.sonatype.org/content/repositories/opensymphony-releases</url>
+    </repository>
+    <repository>
+      <id>jboss-public-repository-group</id>
+      <name>JBoss Public Maven Repository Group</name>
+      <url>https://repository.jboss.org/nexus/content/groups/public-jboss</url>
+      <layout>default</layout>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <dependencies>
+<!--     <dependency> -->
+<!--       <groupId>org.red5</groupId> -->
+<!--       <artifactId>red5-client</artifactId> -->
+<!--       <version>1.0.3-RELEASE</version> -->
+<!--     </dependency>  -->
+<!--     <dependency> -->
+<!--       <groupId>org.red5</groupId> -->
+<!--       <artifactId>red5-io</artifactId> -->
+<!--       <version>1.0.3</version> -->
+<!--     </dependency>              -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>

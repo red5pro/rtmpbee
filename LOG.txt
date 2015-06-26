@@ -1,0 +1,80 @@
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [file:/Users/toddanderson/Repositories/red5/red5-sever/target/classes/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/Users/toddanderson/.m2/repository/ch/qos/logback/logback-classic/1.1.2/logback-classic-1.1.2.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+13:07:32,537 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.groovy]
+13:07:32,541 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback-test.xml] at [file:/Users/toddanderson/Repositories/red5/red5-client/target/test-classes/logback-test.xml]
+13:07:32,557 |-WARN in ch.qos.logback.classic.LoggerContext[default] - Resource [logback-test.xml] occurs multiple times on the classpath.
+13:07:32,558 |-WARN in ch.qos.logback.classic.LoggerContext[default] - Resource [logback-test.xml] occurs at [file:/Users/toddanderson/Repositories/red5/red5-sever/target/test-classes/logback-test.xml]
+13:07:32,558 |-WARN in ch.qos.logback.classic.LoggerContext[default] - Resource [logback-test.xml] occurs at [file:/Users/toddanderson/Repositories/red5/red5-io/target/test-classes/logback-test.xml]
+13:07:32,558 |-WARN in ch.qos.logback.classic.LoggerContext[default] - Resource [logback-test.xml] occurs at [file:/Users/toddanderson/Repositories/red5/red5-client/target/test-classes/logback-test.xml]
+13:07:34,688 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - debug attribute not set
+13:07:34,749 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+13:07:34,868 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [CONSOLE]
+13:07:35,104 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+13:07:35,884 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [CONSOLE] to Logger[ROOT]
+13:07:35,902 |-INFO in ch.qos.logback.classic.joran.action.LevelAction - org.red5 level set to DEBUG
+13:07:35,906 |-INFO in ch.qos.logback.classic.joran.action.LevelAction - org.red5.client level set to TRACE
+13:07:35,909 |-INFO in ch.qos.logback.classic.joran.action.LevelAction - org.red5.io level set to INFO
+13:07:35,913 |-INFO in ch.qos.logback.classic.joran.action.LevelAction - org.red5.server.util level set to INFO
+13:07:35,917 |-INFO in ch.qos.logback.classic.joran.action.LevelAction - org.red5.server.net level set to TRACE
+13:07:35,921 |-INFO in ch.qos.logback.classic.joran.action.LevelAction - net.sf.ehcache level set to INFO
+13:07:35,925 |-INFO in ch.qos.logback.classic.joran.action.LevelAction - net.sourceforge.groboutils level set to INFO
+13:07:35,925 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - End of configuration.
+13:07:35,934 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@34fe315d - Registering current configuration as safe fallback point
+
+SLF4J: Actual binding is of type [ch.qos.logback.classic.selector.DefaultContextSelector]
+2014-09-10 13:07:36,095 [DEBUG] org.red5.client.net.rtmp.RTMPMinaIoHandler - Set handler: org.red5.client.net.rtmp.RTMPClient@31a3ca10
+2014-09-10 13:07:36,156 [DEBUG] org.red5.client.net.rtmp.BaseRTMPClientHandler - connect server: 54.201.243.119 port 1935 connect - params: {objectEncoding=0, app=live, flashVer=WIN 11,2,202,235, fpad=false, tcUrl=rtmp://54.201.243.119:1935/live, audioCodecs=3575, videoFunction=1, pageUrl=null, path=live, capabilities=15, swfUrl=null, videoCodecs=252} callback: com.infrared5.rtmpbee.Bee$2@44aea710 args: null
+2014-09-10 13:07:36,159 [INFO] org.red5.client.net.rtmp.BaseRTMPClientHandler - rtmp://54.201.243.119:1935/live
+2014-09-10 13:07:36,852 [DEBUG] org.red5.client.net.rtmp.RTMPMinaIoHandler - Session created
+2014-09-10 13:07:37,243 [TRACE] org.red5.client.net.rtmp.RTMPClientConnManager - constructor
+2014-09-10 13:07:37,350 [DEBUG] org.red5.server.BaseConnection - New BaseConnection - type: persistent
+2014-09-10 13:07:37,388 [DEBUG] org.red5.server.BaseConnection - Generated session id: E3HJDTBWBXRHN
+2014-09-10 13:07:37,553 [INFO] org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor - Initializing ExecutorService 
+2014-09-10 13:07:37,555 [TRACE] org.red5.client.net.rtmp.RTMPClientConnManager - Connections: 1
+2014-09-10 13:07:37,556 [TRACE] org.red5.client.net.rtmp.RTMPClientConnManager - Connection created: RTMPMinaConnection null:0 to null client: null session: E3HJDTBWBXRHN state: connect
+2014-09-10 13:07:37,563 [TRACE] org.red5.server.net.rtmp.RTMPMinaConnection - setIoSession conn: RTMPMinaConnection 54.201.243.119:1935 to null client: null session: E3HJDTBWBXRHN state: connect
+2014-09-10 13:07:45,157 [TRACE] org.red5.server.net.rtmp.RTMPHandshake - Handshake ctor
+2014-09-10 13:07:46,803 [TRACE] org.red5.server.net.rtmp.RTMPHandshake - Setting handshake type: 3
+2014-09-10 13:07:46,805 [DEBUG] org.red5.client.net.rtmp.RTMPMinaIoHandler - Session opened
+2014-09-10 13:07:46,806 [DEBUG] org.red5.client.net.rtmp.RTMPMinaIoHandler - Handshake - client phase 1
+2014-09-10 13:07:46,807 [TRACE] org.red5.server.net.rtmp.RTMPHandshake - doHandshake: null
+2014-09-10 13:07:46,808 [DEBUG] org.red5.server.net.rtmp.RTMPHandshake - generateClientRequest1
+2014-09-10 13:07:46,810 [DEBUG] org.red5.server.net.rtmp.RTMPHandshake - Creating client handshake part 1 with keys/hashes
+2014-09-10 13:07:47,925 [DEBUG] org.red5.server.net.rtmp.RTMPHandshake - Public key: 136240816309505268646442852068965815575027526685130698238832820708954702801102879850485986036897468883170034972191811696408144731259217529787681205790516478561697537384839485737653841746296564947769497462523313256320962090660147705457294619835019210366878977776096699274718918666833982759278836097226577343019
+2014-09-10 13:07:48,005 [DEBUG] org.red5.server.net.rtmp.RTMPHandshake - Public key as bytes - length [129]: 00c2036bb8c04a710dfd9a040fd19e9cbdeb9c10d4448a4ec11ec4b64917a93b3d51277e609d43bfe46b6af144dd5150037fb22b2e29e7d67b0b0740db935d2b5a37f08471f01f731fc1eab5ada99af77742bcd6ce0bd5d2c804fd7d4b87851e22365801fc71d1913bf0372ce13879963b35e588463d38a2cefd460d9b3cccf22b
+2014-09-10 13:07:48,006 [DEBUG] org.red5.server.net.rtmp.RTMPHandshake - Truncated public key length to 128
+2014-09-10 13:07:48,008 [DEBUG] org.red5.server.net.rtmp.RTMPHandshake - Client public key: c2036bb8c04a710dfd9a040fd19e9cbdeb9c10d4448a4ec11ec4b64917a93b3d51277e609d43bfe46b6af144dd5150037fb22b2e29e7d67b0b0740db935d2b5a37f08471f01f731fc1eab5ada99af77742bcd6ce0bd5d2c804fd7d4b87851e22365801fc71d1913bf0372ce13879963b35e588463d38a2cefd460d9b3cccf22b
+2014-09-10 13:07:48,091 [TRACE] org.red5.client.net.rtmpe.RTMPEIoFilter - Not encrypting write request
+2014-09-10 13:07:48,136 [DEBUG] org.red5.client.net.rtmp.RTMPMinaIoHandler - messageSent
+2014-09-10 13:07:48,138 [TRACE] org.red5.client.net.rtmp.RTMPMinaIoHandler - Session id: E3HJDTBWBXRHN
+2014-09-10 13:07:48,139 [DEBUG] org.red5.client.net.rtmp.RTMPConnManager - Getting connection by session id: E3HJDTBWBXRHN
+2014-09-10 13:07:48,166 [DEBUG] org.red5.client.net.rtmp.RTMPMinaIoHandler - Session closed
+2014-09-10 13:07:48,167 [TRACE] org.red5.client.net.rtmp.RTMPMinaIoHandler - Session id: E3HJDTBWBXRHN
+2014-09-10 13:07:48,168 [DEBUG] org.red5.client.net.rtmp.RTMPConnManager - Getting connection by session id: E3HJDTBWBXRHN
+2014-09-10 13:07:48,170 [DEBUG] org.red5.client.net.rtmp.BaseRTMPClientHandler - connectionClosed
+2014-09-10 13:07:48,171 [DEBUG] org.red5.server.net.rtmp.BaseRTMPHandler - connectionClosed: E3HJDTBWBXRHN
+2014-09-10 13:07:48,172 [DEBUG] org.red5.server.net.rtmp.RTMPConnection - close: E3HJDTBWBXRHN
+2014-09-10 13:07:48,174 [DEBUG] org.red5.server.net.rtmp.RTMPConnection - State: connect
+2014-09-10 13:07:48,198 [DEBUG] org.red5.server.api.Red5 - Set connection: E3HJDTBWBXRHN with thread: NioProcessor-2
+2014-09-10 13:07:48,224 [DEBUG] org.red5.server.net.rtmp.RTMPConnection - Stream service was not found for scope: null or non-existant
+2014-09-10 13:07:48,226 [DEBUG] org.red5.server.BaseConnection - Close, not connected nothing to do
+2014-09-10 13:07:48,227 [DEBUG] org.red5.server.net.rtmp.RTMPConnection - Shutting down executor
+2014-09-10 13:07:48,229 [DEBUG] org.red5.server.net.rtmp.RTMPConnection - Executor - shutdown: true queued: 0
+2014-09-10 13:07:48,231 [INFO] org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor - Shutting down ExecutorService
+2014-09-10 13:07:48,233 [TRACE] org.red5.server.net.rtmp.RTMPConnection - Memory at close - free: 70732K total: 83008K
+2014-09-10 13:07:48,235 [DEBUG] org.red5.server.net.rtmp.RTMPMinaConnection - IO Session closing: true
+2014-09-10 13:07:48,236 [DEBUG] org.red5.server.net.rtmp.RTMPMinaConnection - Connection state: RTMP [state=disconnecting, encrypted=false, readChunkSize=128, writeChunkSize=128, encoding=AMF0]
+2014-09-10 13:07:48,237 [DEBUG] org.red5.client.net.rtmp.BaseRTMPClientHandler - connectionClosed
+2014-09-10 13:07:48,239 [DEBUG] org.red5.server.net.rtmp.BaseRTMPHandler - connectionClosed: E3HJDTBWBXRHN
+2014-09-10 13:07:48,240 [TRACE] org.red5.server.net.rtmp.RTMPConnection - setStateCode: 5 - disconnected
+2014-09-10 13:07:48,248 [TRACE] org.red5.server.net.rtmp.RTMPConnManager - Connection manager instance does not exist
+2014-09-10 13:07:48,249 [TRACE] org.red5.server.net.rtmp.RTMPConnManager - Connection manager bean doesnt exist, creating new instance
+2014-09-10 13:07:48,259 [TRACE] org.red5.server.net.rtmp.RTMPConnManager - Removing connection with session id: E3HJDTBWBXRHN
+2014-09-10 13:07:48,261 [TRACE] org.red5.server.net.rtmp.RTMPConnManager - Connections (0) at pre-remove: []
+2014-09-10 13:07:48,262 [TRACE] org.red5.server.net.rtmp.BaseRTMPHandler - connectionClosed: RTMPMinaConnection 54.201.243.119:1935 to null client: null session: E3HJDTBWBXRHN state: disconnected
+2014-09-10 13:07:48,752 [TRACE] org.red5.server.net.rtmp.RTMPConnection - setStateCode: 5 - disconnected
+2014-09-10 13:07:48,754 [TRACE] org.red5.server.net.rtmp.RTMPConnManager - Removing connection with session id: E3HJDTBWBXRHN
+2014-09-10 13:07:48,755 [TRACE] org.red5.server.net.rtmp.RTMPConnManager - Connections (0) at pre-remove: []
+2014-09-10 13:07:48,757 [TRACE] org.red5.server.net.rtmp.BaseRTMPHandler - connectionClosed: RTMPMinaConnection 54.201.243.119:1935 to null client: null session: E3HJDTBWBXRHN state: disconnected
