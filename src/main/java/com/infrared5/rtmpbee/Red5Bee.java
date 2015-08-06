@@ -35,37 +35,45 @@ public class Red5Bee {
 		int numBullets;
 		int timeout = 10;
 		
+		System.out.printf("Number of arguments: %d.\n", args.length);
+		
 		// 3 option for client specific attack.
 		if(args.length < 2) {
-			Console console = System.console();
-			console.printf("Incorrect number of args, please pass in the following: \n "
+			System.out.printf("Incorrect number of args, please pass in the following: \n "
 					+ "\narg[0] = RTMP URL"
 					+ "\narg[1] = numBullets");
 			return;
 		}
 		else if(args.length >= 2 && args.length <= 3) {
 			
+			System.out.printf("Determined its an invaluable attack...");
+			
 			URI uri;
 			String protocol;
 			String path;
 			String[] paths;
 			try {
+				System.out.printf("Found URL: %s.\n", args[0]);
 				uri = new URI(args[0]);
 				protocol = uri.getScheme();
+				System.out.printf("Protocol: %s.\n", protocol);
 				url = uri.getHost();
+				System.out.printf("Host: %s.\n", url);
 				port = uri.getPort();
+				System.out.printf("Port: %s.\n", port);
 				path = uri.getPath();
+				System.out.printf("Path: %s.\n", path);
 				paths = path.split("/");
 				if(paths.length < 3) {
-					System.console().printf("Could not properly parse provided endpoint for RTMP: " + args[0] + ".");
+					System.out.printf("Could not properly parse provided endpoint for RTMP: " + args[0] + ".");
 					return;
 				}
-				System.console().printf("protocol: " + protocol + ", url: " + url + ", port: " + port + ", paths: " + paths[1] + ", " + paths[2] + ".\n");
+				System.out.printf("protocol: " + protocol + ", url: " + url + ", port: " + port + ", paths: " + paths[1] + ", " + paths[2] + ".\n");
 				application = paths[1];
 				streamName = paths[2];
 			}
 			catch(Exception e) {
-				System.console().printf("Could not properly parse provided endpoint for RTMP: " + args[0] + ".");
+				System.out.printf("Could not properly parse provided endpoint for RTMP: " + args[0] + ".");
 				e.printStackTrace();
 				return;
 			}
@@ -78,8 +86,7 @@ public class Red5Bee {
 		}
 		// 5 option arguments for origin attack.
 		else if(args.length < 5) {
-    		Console console = System.console();
-    		console.printf("Incorrect number of args, please pass in the following: \n  "
+			System.out.printf("Incorrect number of args, please pass in the following: \n  "
     				+ "\narg[0] = IP Address"
     				+ "\narg[1] = port"
     				+ "\narg[2] = app"
@@ -89,6 +96,8 @@ public class Red5Bee {
     		return;
     	}
 		else {
+			
+			System.out.printf("Determined its an original attack...");
 			
 			url = args[0];
 			port = Integer.parseInt(args[1]);
