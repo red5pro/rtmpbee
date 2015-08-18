@@ -1,5 +1,5 @@
 Requirements
----
+===
 
 Github projects listed pulled locally and referenced in workspace:
 
@@ -10,7 +10,7 @@ Github projects listed pulled locally and referenced in workspace:
 Built using **Java 6 JDK**
 
 Building
----
+===
 Unfortunately, due to the dependency versions of the Red5 libraries, they are not exposed through maven and therefore building is not possible using the POM.
 
 As such, this project should be imported into Eclipse (or similar IDE) and build exported:
@@ -25,11 +25,26 @@ As such, this project should be imported into Eclipse (or similar IDE) and build
 
 
 To Run
+===
+
+```
+$ java -jar rtmpbee.jar [stream-url] [stream-count] [timeout]
+```
+
+Options
 ---
-In [Red5Bee.java](https://github.com/infrared5/rtmpbee/blob/master/src/main/java/com/infrared5/rtmpbee/Red5Bee.java#L28) the host, port and application are passed to the *Bee* - change them to whatever you need to test with.
+
+### stream-url
+The RESTful URL on the Stream Manager to use in accessing an endpoint url for stream subscription (e.g., [http://52.6.70.166:8080/streammanager/api/1.0/event/play/G2UQDUxfZD9PpPJaDA](http://52.6.70.166:8080/streammanager/api/1.0/event/play/G2UQDUxfZD9PpPJaDA)).
+
+### stream-count
+The amount of Bees to send on attack
+
+### timeout
+The amount of time to subscribe to stream. _The actual subscription time may differ from this amount. This is really the time lapse of start of subscription until end._
 
 Issue(s)
----
+===
 No runtime or compile-time exceptions are thrown, however, when run as **Java Application**, it goes through connection request and immediately closes.
 
 Please refer to the [LOG](https://github.com/infrared5/rtmpbee/blob/master/LOG.txt) for further details.
