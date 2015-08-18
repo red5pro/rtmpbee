@@ -86,12 +86,16 @@ public class Bullet {
 		public void resultReceived(IPendingServiceCall call) {
 			ObjectMap<?, ?> map = (ObjectMap<?, ?>) call.getResult();
 			String code = (String) map.get("code");
+			// Server connection established, but issue in connection.
 			if (StatusCodes.NC_CONNECT_FAILED.equals(code) ||
 					StatusCodes.NC_CONNECT_REJECTED.equals(code) ||
 					StatusCodes.NC_CONNECT_INVALID_APPLICATION.equals(code)) {
-				// TODO: Notify of failure.
-				client.disconnect();
+				dispose();
+				if(completeHandler != null) {
+					completeHandler.OnBulletComplete();
+				}
 			} 
+			// If connection successful, establish a stream
 			else if (StatusCodes.NC_CONNECT_SUCCESS.equals(code)) {
 				client.createStream(streamCallback);
 			} 

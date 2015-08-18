@@ -168,8 +168,6 @@ public class Red5Bee implements IBulletCompleteHandler, IBulletFailureHandler {
 		
     }
     
-    private static int COUNT = 0;
-    
     /**
      * Loads up and fires.
      */
@@ -207,20 +205,19 @@ public class Red5Bee implements IBulletCompleteHandler, IBulletFailureHandler {
 	 */
 	private void loadMachineGun() {
 		// load our bullets into the gun
-		String thisUrl = url;
 		for(int i = 0; i< numBullets; i++) {
-//			if(COUNT++ >= 1) {
-//				thisUrl = url.substring(0, url.length() - 2);
-//			}
-			machineGun.put(i, new Bullet((i+1), thisUrl, port, application, streamName, timeout));
+			machineGun.put(i, new Bullet((i+1), url, port, application, streamName, timeout));
 		}
 	}
 	
 	@Override
 	public void OnBulletComplete() {
-		if(--bulletsRemaining <= 0) {
+		bulletsRemaining = bulletsRemaining - 1;
+		if(bulletsRemaining <= 0) {
+			System.out.println("All bullets expended. Bye Bye.");
 			System.exit(1);
 		}
+		System.out.println("Bullet has completed journey. Remaining Count: " + bulletsRemaining);
 	}
 	
 	@Override
