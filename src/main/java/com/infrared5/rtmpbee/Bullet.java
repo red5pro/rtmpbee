@@ -29,9 +29,25 @@ public class Bullet {
 	private Timer timer;
 	private int timeout = 10; // seconds
 	
+	private ConnectionCloseHook shutdownHook;
 	private IBulletCompleteHandler completeHandler;
 	public boolean hasCompleted = false;
 	volatile boolean connectionException = false;
+	
+	class ConnectionCloseHook implements Runnable {
+		
+		private Bullet client;
+
+		public ConnectionCloseHook(Bullet client) {
+			this.client = client;
+		}
+
+		@Override
+		public void run() {
+			this.client.connectionException = true;
+		}
+
+	}
 	
 	public void onBWCheck(Object params) {
 		System.out.println("onBWCheck: " + params);
@@ -147,7 +163,9 @@ public class Bullet {
 			client.setExceptionHandler(null);
 			client.setStreamEventDispatcher(null);
 			client.setStreamEventHandler(null);
+			client.setConnectionClosedHandler(null);
 			client.disconnect();
+			shutdownHook = null;
 			client = null;
 		}
 		
@@ -168,6 +186,7 @@ public class Bullet {
 	public Thread fire(IBulletCompleteHandler completeHandler, IBulletFailureHandler failHandler) {
 		
 		this.completeHandler = completeHandler;
+		this.shutdownHook = new ConnectionCloseHook(this);
 		
 		final String description = this.toString();
 		final IBulletFailureHandler failureHandler = failHandler;
@@ -200,6 +219,7 @@ public class Bullet {
 				System.out.println(notification.toString());
 			}
 		});
+		client.setConnectionClosedHandler(shutdownHook);
 		
 		this.thread = new Thread(new Runnable() {
 			
