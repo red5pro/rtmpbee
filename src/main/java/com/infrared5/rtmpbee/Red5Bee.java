@@ -224,18 +224,24 @@ public class Red5Bee implements IBulletCompleteHandler, IBulletFailureHandler {
 	public void OnBulletFireFail() {
 		
 		System.out.println("Failure for bullet to fire. Possible missing endpoint. Accessing a new endpoint from stream manager.");
-		try {
+		
+		// If is an invaluable-based call, we may need to re-access on a test where the server went down.
+		if(this.streamManagerURL != null) {
+		
+			try {
+				
+				modifyEndpointProperties(this.streamManagerURL);
+				
+				Thread t1 = new Bullet(++numBullets, url, port, application, streamName, timeout).fire(this, this);
+				t1.start();
+				t1.join();
+				
+			}
+			catch(Exception e) {
+				System.out.printf("Could not refire bullet with Stream Manager Endpoint URL: %s\n.", this.streamManagerURL);
+				e.printStackTrace();
+			}
 			
-			modifyEndpointProperties(this.streamManagerURL);
-			
-			Thread t1 = new Bullet(++numBullets, url, port, application, streamName, timeout).fire(this, this);
-			t1.start();
-			t1.join();
-			
-		}
-		catch(Exception e) {
-			System.out.printf("Could not refire bullet with Stream Manager Endpoint URL: %s\n.", this.streamManagerURL);
-			e.printStackTrace();
 		}
 		
 	}
