@@ -7,7 +7,7 @@ Github projects listed pulled locally and referenced in workspace:
 * [red5-client](https://github.com/Red5/red5-client)
 * [red5-io](https://github.com/Red5/red5-io)
 
-Built using **Java 6 JDK**
+Built using **Java 7 JDK**
 
 Building
 ===
@@ -28,20 +28,35 @@ To Run
 ===
 
 ```
-$ java -jar rtmpbee.jar [stream-url] [stream-count] [timeout]
+$ java -jar rtmpbee.jar [red5pro-server-IP] [port] [app-name] [stream-name] [count] [timeout]
 ```
 
 Options
 ---
 
-### stream-url
-The RESTful URL on the Stream Manager to use in accessing an endpoint url for stream subscription (e.g., [http://52.6.70.166:8080/streammanager/api/1.0/event/play/G2UQDUxfZD9PpPJaDA](http://52.6.70.166:8080/streammanager/api/1.0/event/play/G2UQDUxfZD9PpPJaDA)).
+### red5pro-server-IP
+The IP of the Red5 Pro Server that you want the bee to subscribe to (attack)
 
-### stream-count
-The amount of Bees to send on attack
+### port
+The port on the Red5 Pro Server that you want the bee to subscribe to (attack)
+
+### app-name
+The application name that provides the streaming capabilities
+
+### stream-name
+The name of the stream you want the bee to subscribe to (attack)
+
+### count
+The amount of bullets (stingers, a.k.a. stream connections) for the bee to have in the attack
 
 ### timeout
 The amount of time to subscribe to stream. _The actual subscription time may differ from this amount. This is really the time lapse of start of subscription until end._
+
+Example
+---
+```
+java -jar rtmpbee.jar 104.196.37.72 1935 live G2UQDUxfZD9PpPJaDA 100 10
+```
 
 Issue(s)
 ===
