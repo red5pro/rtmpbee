@@ -6,6 +6,7 @@ Github projects listed pulled locally and referenced in workspace:
 * [red5-server](https://github.com/Red5/red5-server)
 * [red5-client](https://github.com/Red5/red5-client)
 * [red5-io](https://github.com/Red5/red5-io)
+* [red5-server-common](https://github.com/Red5/red5-server-common)
 
 Built using **Java 7 JDK**
 
