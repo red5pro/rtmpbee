@@ -1,8 +1,11 @@
 package com.infrared5.rtmpbee;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.apache.commons.lang3.StringUtils;
+import org.red5.client.net.rtmp.ClientExceptionHandler;
 import org.red5.client.net.rtmp.INetStreamEventHandler;
 import org.red5.client.net.rtmp.RTMPClient;
 import org.red5.io.utils.ObjectMap;
@@ -12,125 +15,243 @@ import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.api.stream.IStreamPacket;
 import org.red5.server.net.rtmp.event.Notify;
+import org.red5.server.net.rtmp.status.StatusCodes;
 
-public class Bullet {
-	
-	private RTMPClient client;
-	public String streamName;
-	private String url;
-	private int port;
-	private String application;
-	
-	private Timer timer;
-	private int timeout = 10; // seconds
-	
-	class QuitTask extends TimerTask {
-		public void run() {
-			System.exit(1);
-			timer.cancel();
-		}
-	}
-	
-	public void onBWCheck(Object params) {
-		System.out.println("onBWCheck: " + params);
-	}
-	
-	/**
-	 * Called when bandwidth has been configured.
-	 */
-	public void onBWDone(Object params) {
-		System.out.println("onBWDone: " + params);
-	}
-	
-	public void onStatus(Object params) {
-		System.out.println("onStatus: " + params);
-	}
-	
-	private IPendingServiceCallback streamCallback = new IPendingServiceCallback() {
-		
-		public void resultReceived(IPendingServiceCall call) {
-			if (call.getServiceMethodName().equals("createStream")) {
-				Integer streamId = (Integer) call.getResult();
-				
-				// -2: live then recorded, -1: live, >=0: recorded
-				// streamId, streamName, mode, length
-				client.play(streamId, streamName, -2, 0);
-				
-				timer = new Timer();
-				timer.schedule(new QuitTask(), timeout*1000);
-			}
-		}
-		
-	};
-	
-	private IPendingServiceCallback connectCallback = new IPendingServiceCallback() {
-		
-		public void resultReceived(IPendingServiceCall call) {
-			ObjectMap<?, ?> map = (ObjectMap<?, ?>) call.getResult();
-			String code = (String) map.get("code");
-			if ("NetConnection.Connect.Rejected".equals(code)) {
-				// TODO: Notify of failure.
-				client.disconnect();
-			} else if ("NetConnection.Connect.Success".equals(code)) {
-				client.createStream(streamCallback);
-			} else {
-				// TODO: Notify of failure.
-				System.out.print("ERROR code:" + code);
-			}
-		}
-	};
+public class Bullet implements Runnable {
 
-	/**
-	 * Constructs a bullet which represents an RTMPClient.
-	 * 
-	 * @param url
-	 * @param port
-	 * @param application
-	 * @param streamName
-	 */
-	public Bullet(String url, int port, String application, String streamName) {
-		this.url = url;
-		this.port = port;
-		this.application = application;
-		this.streamName = streamName;
-	}
-	
-	/**
-	 * Constructs a bullet which represents an RTMPClient.
-	 * 
-	 * @param url
-	 * @param port
-	 * @param application
-	 * @param streamName
-	 * @param timeout
-	 */
-	public Bullet(String url, int port, String application, String streamName, int timeout) {
-		this.url = url;
-		this.port = port;
-		this.application = application;
-		this.streamName = streamName;
-		this.timeout = timeout;
-	}
+    private final int order;
 
-	/**
-	 * Fires off the RTMPClient's that connect to the stream.
-	 */
-	public void fire() {
-		client = new RTMPClient();
-		client.setServiceProvider(this);		
-		client.setStreamEventDispatcher(new IEventDispatcher() {
-			public void dispatchEvent(IEvent event) {
-				IStreamPacket data = (IStreamPacket) event;
-//				System.out.println("dispatchEvent: " + event);
-			}			
-		});
-		client.setStreamEventHandler(new INetStreamEventHandler() {
-			public void onStreamEvent(Notify arg0) {
-//				System.out.print("onStreamEvent: " + arg0);
-			}
-		});
-		
-    	client.connect(url, port, client.makeDefaultConnectionParams(url, port, application), connectCallback);
-	}
-	
+    private final String url;
+
+    private final int port;
+
+    private final String application;
+
+    public final String streamName;
+
+    public final String description;
+
+    private int timeout = 10; // seconds
+
+    private RTMPClient client;
+
+    private ConnectionCloseHook shutdownHook;
+
+    private IBulletCompleteHandler completeHandler;
+
+    private IBulletFailureHandler failHandler;
+
+    public AtomicBoolean completed = new AtomicBoolean(false);
+
+    volatile boolean connectionException;
+
+    private Future<?> future;
+
+    /**
+     * Constructs a bullet which represents an RTMPClient.
+     * 
+     * @param url
+     * @param port
+     * @param application
+     * @param streamName
+     */
+    private Bullet(int order, String url, int port, String application, String streamName) {
+        this.order = order;
+        this.url = url;
+        this.port = port;
+        this.application = application;
+        this.streamName = streamName;
+        this.description = toString();
+    }
+
+    /**
+     * Constructs a bullet which represents an RTMPClient.
+     * 
+     * @param url
+     * @param port
+     * @param application
+     * @param streamName
+     * @param timeout
+     */
+    private Bullet(int order, String url, int port, String application, String streamName, int timeout) {
+        this(order, url, port, application, streamName);
+        this.timeout = timeout;
+    }
+
+    public void run() {
+        this.shutdownHook = new ConnectionCloseHook(this);
+        System.out.println("<<fire>>: " + description);
+        client = new RTMPClient();
+        client.setServiceProvider(this);
+        client.setExceptionHandler(new ClientExceptionHandler() {
+            @Override
+            public void handleException(Throwable throwable) {
+                connectionException = true;
+                dispose();
+            }
+        });
+        client.setStreamEventDispatcher(new IEventDispatcher() {
+            @Override
+            public void dispatchEvent(IEvent event) {
+                @SuppressWarnings("unused")
+                IStreamPacket data = (IStreamPacket) event;
+                System.out.println("dispatchEvent: " + event);
+            }
+        });
+        client.setStreamEventHandler(new INetStreamEventHandler() {
+            @Override
+            public void onStreamEvent(Notify notification) {
+                System.out.println("<<event>>: " + description);
+                System.out.println(notification.toString());
+            }
+        });
+        client.setConnectionClosedHandler(shutdownHook);
+
+        future = Red5Bee.submit(new Runnable() {
+
+            public void run() {
+                client.connect(url, port, client.makeDefaultConnectionParams(url, port, application), connectCallback);
+                while (!completed.get()) {
+                    if (connectionException && failHandler != null) {
+                        System.out.println("Failure in Bullet: " + description);
+                        failHandler.OnBulletFireFail();
+                    }
+                    try {
+                        Thread.sleep(1L);
+                    } catch (InterruptedException e) {
+                    }
+                }
+            }
+
+        });
+    }
+
+    public void onBWCheck(Object params) {
+        System.out.println("onBWCheck: " + params);
+    }
+
+    /**
+     * Called when bandwidth has been configured.
+     */
+    public void onBWDone(Object params) {
+        System.out.println("onBWDone: " + params);
+    }
+
+    public void onStatus(Object params) {
+        System.out.printf("(bullet #%d) onStatus: %s\n", order, params);
+        String status = params.toString();
+        // if stream is stopped or unpublished
+        if (status.indexOf("Stop") != -1 || status.indexOf("UnPublish") != -1) {
+            if (completed.compareAndSet(false, true)) {
+                dispose();
+                if (completeHandler != null) {
+                    completeHandler.OnBulletComplete();
+                }
+            }
+        }
+    }
+
+    private IPendingServiceCallback streamCallback = new IPendingServiceCallback() {
+
+        public void resultReceived(IPendingServiceCall call) {
+            if (call.getServiceMethodName().equals("createStream")) {
+                Integer streamId = (Integer) call.getResult();
+                // -2: live then recorded, -1: live, >=0: recorded
+                // streamId, streamName, mode, length
+                client.play(streamId, streamName, -2, 0);
+                Red5Bee.submit(new Runnable() {
+                    public void run() {
+                        System.out.printf("Successful subscription of bullet, disposing: bullet #%d\n", order);
+                        if (completed.compareAndSet(false, true)) {
+                            dispose();
+                            if (completeHandler != null) {
+                                completeHandler.OnBulletComplete();
+                            }
+                        }
+                    }
+                }, timeout, TimeUnit.SECONDS);
+            }
+        }
+    };
+
+    private IPendingServiceCallback connectCallback = new IPendingServiceCallback() {
+
+        public void resultReceived(IPendingServiceCall call) {
+            ObjectMap<?, ?> map = (ObjectMap<?, ?>) call.getResult();
+            String code = (String) map.get("code");
+            // Server connection established, but issue in connection.
+            if (StatusCodes.NC_CONNECT_FAILED.equals(code) || StatusCodes.NC_CONNECT_REJECTED.equals(code) || StatusCodes.NC_CONNECT_INVALID_APPLICATION.equals(code)) {
+                if (completed.compareAndSet(false, true)) {
+                    dispose();
+                    if (completeHandler != null) {
+                        completeHandler.OnBulletComplete();
+                    }
+                }
+            }
+            // If connection successful, establish a stream
+            else if (StatusCodes.NC_CONNECT_SUCCESS.equals(code)) {
+                client.createStream(streamCallback);
+            } else {
+                // TODO: Notify of failure.
+                System.err.print("ERROR code:" + code);
+            }
+        }
+    };
+
+    public void dispose() {
+        System.out.printf("dispose: (bullet #%d)\n", order);
+        if (client != null) {
+            client.setServiceProvider(null);
+            client.setExceptionHandler(null);
+            client.setStreamEventDispatcher(null);
+            client.setStreamEventHandler(null);
+            client.setConnectionClosedHandler(null);
+            client.disconnect();
+            shutdownHook = null;
+            client = null;
+        }
+        if (future != null) {
+            future.cancel(true);
+        }
+    }
+
+    public void setCompleteHandler(IBulletCompleteHandler completeHandler) {
+        this.completeHandler = completeHandler;
+    }
+
+    public void setFailHandler(IBulletFailureHandler failHandler) {
+        this.failHandler = failHandler;
+    }
+
+    public String toString() {
+        return StringUtils.join(new String[] { "(bullet #" + this.order + ")", "URL: " + this.url, "PORT: " + this.port, "APP: " + this.application, "NAME: " + this.streamName }, "\n");
+    }
+
+    class ConnectionCloseHook implements Runnable {
+
+        private Bullet client;
+
+        public ConnectionCloseHook(Bullet client) {
+            this.client = client;
+        }
+
+        @Override
+        public void run() {
+            this.client.connectionException = true;
+        }
+
+    }
+
+    static final class Builder {
+
+        static Bullet build(int order, String url, int port, String application, String streamName) {
+            return new Bullet(order, url, port, application, streamName);
+        }
+
+        static Bullet build(int order, String url, int port, String application, String streamName, int timeout) {
+            return new Bullet(order, url, port, application, streamName, timeout);
+        }
+
+    }
+
 }
