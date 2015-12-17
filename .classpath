@@ -22,14 +22,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/mina-core-2.0.8.jar"/>
-	<classpathentry kind="lib" path="lib/mina-integration-beans-2.0.8.jar"/>
-	<classpathentry kind="lib" path="lib/mina-integration-jmx-2.0.8.jar"/>
-	<classpathentry kind="lib" path="lib/mina-integration-ognl-2.0.8.jar"/>
-	<classpathentry kind="lib" path="lib/red5-client-1.0.2-RC2.jar"/>
-	<classpathentry kind="lib" path="lib/red5-io-1.0.3.jar"/>
-	<classpathentry kind="lib" path="lib/red5-server.jar"/>
-	<classpathentry kind="lib" path="lib/logback-classic-1.1.2.jar"/>
-	<classpathentry kind="lib" path="lib/logback-core-1.1.2.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

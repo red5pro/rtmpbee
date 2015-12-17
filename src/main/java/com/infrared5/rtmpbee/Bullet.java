@@ -80,9 +80,7 @@ public class Bullet implements Runnable {
 
     public void run() {
         this.shutdownHook = new ConnectionCloseHook(this);
-
         System.out.println("<<fire>>: " + description);
-
         client = new RTMPClient();
         client.setServiceProvider(this);
         client.setExceptionHandler(new ClientExceptionHandler() {

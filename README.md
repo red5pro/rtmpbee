@@ -3,7 +3,6 @@ Requirements
 
 Github projects listed pulled locally and referenced in workspace:
 
-* [red5-server](https://github.com/Red5/red5-server)
 * [red5-client](https://github.com/Red5/red5-client)
 * [red5-io](https://github.com/Red5/red5-io)
 * [red5-server-common](https://github.com/Red5/red5-server-common)
@@ -12,9 +11,10 @@ Built using **Java 7 JDK**
 
 Building
 ===
-Unfortunately, due to the dependency versions of the Red5 libraries, they are not exposed through maven and therefore building is not possible using the POM.
 
-As such, this project should be imported into Eclipse (or similar IDE) and build exported:
+##Eclipse
+
+To create the executable jar in Eclipse, use export (~86Mb):
 
 1. Import `rtmpbee` in Eclipse workspace
 2. Right-click on the `rtmpbee` project in the Project Explorer
@@ -24,11 +24,18 @@ As such, this project should be imported into Eclipse (or similar IDE) and build
 6. Make sure __Package required libraries...__ is ticked ON
 7. Click Finish
 
+##Maven
+
+Creates an executable jar with all the needed dependencies (~17Mb)
+
+```sh
+mvn clean compile assembly:single
+```
 
 To Run
 ===
 
-```
+```sh
 $ java -jar rtmpbee.jar [red5pro-server-IP] [port] [app-name] [stream-name] [count] [timeout]
 ```
 
