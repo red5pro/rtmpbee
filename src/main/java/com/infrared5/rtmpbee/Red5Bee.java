@@ -141,20 +141,13 @@ public class Red5Bee implements IBulletCompleteHandler, IBulletFailureHandler {
 
         Red5Bee bee;
 
-        // 3 option for client specific attack.
-        if (args.length < 2) {
-        	
-            System.out.printf("Incorrect number of args, please pass in the following: \n " + "\narg[0] = Stream Manager Endpoint to access Stream Subscription URL" + "\narg[1] = numBullets");
-            return;
-            
-        }
-        // 5 option arguments for original attack.
-        else if (args.length < 5) {
+        if (args.length < 5) {
         	
             System.out.printf("Incorrect number of args, please pass in the following: \n  " + "\narg[0] = IP Address" + "\narg[1] = port" + "\narg[2] = app" + "\narg[3] = streamName" + "\narg[4] = numBullets");
             return;
             
-        } else {
+        }
+        else {
         	
             System.out.println("Determined its an original attack...");
             url = args[0];
