@@ -1,11 +1,5 @@
 package com.infrared5.rtmpbee;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -33,8 +27,6 @@ public class Red5Bee implements IBulletCompleteHandler, IBulletFailureHandler {
 
     private int timeout = 10; // in seconds
 
-    private String streamManagerURL; // optional
-
     private AtomicInteger bulletsRemaining = new AtomicInteger();
 
     Map<Integer, Bullet> machineGun = new HashMap<Integer, Bullet>();
@@ -56,22 +48,6 @@ public class Red5Bee implements IBulletCompleteHandler, IBulletFailureHandler {
         this.streamName = streamName;
         this.numBullets = numBullets;
         this.timeout = timeout;
-        this.streamManagerURL = null;
-    }
-
-    /**
-     * Invaluable Bee - provide Stream Manager endpoint for GET or stream uri.
-     * 
-     * @param streamManagerURL
-     * @param numBullets
-     * @param timeout
-     */
-    public Red5Bee(String streamManagerURL, int numBullets, int timeout) throws Exception {
-        this.streamManagerURL = streamManagerURL;
-        this.numBullets = numBullets;
-        this.timeout = timeout;
-        modifyEndpointProperties(this.streamManagerURL);
-
     }
 
     /**
@@ -94,36 +70,6 @@ public class Red5Bee implements IBulletCompleteHandler, IBulletFailureHandler {
      */
     public static ScheduledFuture<?> submit(Runnable runnable, long delay, TimeUnit unit) {
         return executor.schedule(runnable, delay, unit);
-    }
-
-    /**
-     * Updates property state based on data received from Stream Manager Endpoint request.
-     * 
-     * @param smURL
-     * @throws Exception
-     */
-    public void modifyEndpointProperties(String smURL) throws Exception {
-        URI uri;
-        String protocol;
-        String path;
-        String[] paths;
-
-        System.out.printf("Access Streaming Endpoint from Stream Manager URL: %s.\n", streamManagerURL);
-        String endpoint = accessStreamEndpoint(smURL).toString().trim();
-        System.out.printf("Received Streaming Endpoint: %s.\n", endpoint);
-        uri = new URI(endpoint);
-        protocol = uri.getScheme();
-
-        this.url = uri.getHost();
-        this.port = uri.getPort();
-        path = uri.getPath();
-        paths = path.split("/");
-        if (paths.length < 3) {
-            throw new IllegalArgumentException("Could not properly parse provided endpoint for RTMP: " + endpoint + ".");
-        }
-        System.out.printf("protocol: " + protocol + ", url: " + url + ", port: " + port + ", paths: " + paths[1] + ", " + paths[2] + ".\n");
-        this.application = paths[1];
-        this.streamName = paths[2];
     }
 
     /**
@@ -175,62 +121,6 @@ public class Red5Bee implements IBulletCompleteHandler, IBulletFailureHandler {
     @Override
     public void OnBulletFireFail() {
         System.out.println("Failure for bullet to fire. Possible missing endpoint. Accessing a new endpoint from stream manager.");
-        // If is an invaluable-based call, we may need to re-access on a test where the server went down.
-        if (this.streamManagerURL != null) {
-            try {
-                modifyEndpointProperties(this.streamManagerURL);
-                // build a bullet
-                Bullet bullet = Bullet.Builder.build(++numBullets, url, port, application, streamName, timeout);
-                bullet.setCompleteHandler(this);
-                bullet.setFailHandler(this);
-                // submit for execution
-                submit(bullet);
-            } catch (Exception e) {
-                System.out.printf("Could not refire bullet with Stream Manager Endpoint URL: %s\n.", this.streamManagerURL);
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /**
-     * Attempts to access stream endpoint uri from Stream Manager URL.
-     * 
-     * @param desiredUrl
-     * @return
-     * @throws Exception
-     */
-    private String accessStreamEndpoint(String desiredUrl) throws Exception {
-        URL url = null;
-        BufferedReader reader = null;
-        StringBuilder stringBuilder;
-
-        try {
-            url = new URL(desiredUrl);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setReadTimeout(15 * 1000);
-            connection.connect();
-
-            // read the output from the server
-            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            stringBuilder = new StringBuilder();
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                stringBuilder.append(line + "\n");
-            }
-            return stringBuilder.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException ioe) {
-                    ioe.printStackTrace();
-                }
-            }
-        }
     }
 
     /**
@@ -253,28 +143,19 @@ public class Red5Bee implements IBulletCompleteHandler, IBulletFailureHandler {
 
         // 3 option for client specific attack.
         if (args.length < 2) {
+        	
             System.out.printf("Incorrect number of args, please pass in the following: \n " + "\narg[0] = Stream Manager Endpoint to access Stream Subscription URL" + "\narg[1] = numBullets");
             return;
-        } else if (args.length >= 2 && args.length <= 3) {
-            System.out.printf("Determined its an invaluable attack...");
-            url = args[0].toString().trim();
-            numBullets = Integer.parseInt(args[1]);
-            if (args.length > 2) {
-                timeout = Integer.parseInt(args[2]);
-            }
-            try {
-                bee = new Red5Bee(url, numBullets, timeout);
-                bee.attack();
-            } catch (Exception e) {
-                System.out.printf("Could not properly parse provided endpoint from Stream Manager: %s.\n", args[0]);
-                e.printStackTrace();
-            }
+            
         }
-        // 5 option arguments for origin attack.
+        // 5 option arguments for original attack.
         else if (args.length < 5) {
+        	
             System.out.printf("Incorrect number of args, please pass in the following: \n  " + "\narg[0] = IP Address" + "\narg[1] = port" + "\narg[2] = app" + "\narg[3] = streamName" + "\narg[4] = numBullets");
             return;
+            
         } else {
+        	
             System.out.println("Determined its an original attack...");
             url = args[0];
             port = Integer.parseInt(args[1]);
@@ -287,6 +168,7 @@ public class Red5Bee implements IBulletCompleteHandler, IBulletFailureHandler {
             // create the bee
             bee = new Red5Bee(url, port, application, streamName, numBullets, timeout);
             bee.attack();
+            
         }
         // put the main thread in limbo while the bees fly!
         Thread.currentThread().join();
