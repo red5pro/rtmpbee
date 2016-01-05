@@ -71,3 +71,4 @@ Issue(s)
 No runtime or compile-time exceptions are thrown, however, when run as **Java Application**, it goes through connection request and immediately closes.
 
 Please refer to the [LOG](https://github.com/infrared5/rtmpbee/blob/master/LOG.txt) for further details.
+[![Analytics](https://ga-beacon.appspot.com/UA-59819838-3/red5pro/rtmpbee?pixel)](https://github.com/igrigorik/ga-beacon)
