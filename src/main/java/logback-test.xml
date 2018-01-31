@@ -6,7 +6,7 @@
 	<jmxConfigurator contextName="admin" />
 
 	<appender name="bees" class="ch.qos.logback.core.FileAppender">
-		<File>log/bees.log</File>
+		<File>log/rtmpbees.log</File>
 		<Append>false</Append>
 		<Encoding>UTF-8</Encoding>
 		<BufferedIO>false</BufferedIO>
