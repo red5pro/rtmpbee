@@ -143,10 +143,11 @@ public class Bullet implements Runnable {
         // if stream is stopped or unpublished
         if (status.indexOf("Stop") != -1 || status.indexOf("UnPublish") != -1) {
             if (completed.compareAndSet(false, true)) {
-                dispose();
+            	System.out.printf("completeHandler? #%1$b\n", completeHandler);
                 if (completeHandler != null) {
                     completeHandler.OnBulletComplete();
                 }
+                dispose();
             }
         }
     }
@@ -155,18 +156,20 @@ public class Bullet implements Runnable {
 
         public void resultReceived(IPendingServiceCall call) {
             if (call.getServiceMethodName().equals("createStream")) {
-                Integer streamId = (Integer) call.getResult();
+            	Number streamId = (Number) call.getResult();
                 // -2: live then recorded, -1: live, >=0: recorded
                 // streamId, streamName, mode, length
+                System.out.printf("streamCallback:resultReceived: (streamId #%f)\n", streamId);
                 client.play(streamId, streamName, -2, 0);
                 Red5Bee.submit(new Runnable() {
                     public void run() {
                         System.out.printf("Successful subscription of bullet, disposing: bullet #%d\n", order);
                         if (completed.compareAndSet(false, true)) {
-                            dispose();
+                        	System.out.printf("completeHandler? #%1$b\n", completeHandler);
                             if (completeHandler != null) {
                                 completeHandler.OnBulletComplete();
                             }
+                            dispose();
                         }
                     }
                 }, timeout, TimeUnit.SECONDS);
@@ -179,13 +182,15 @@ public class Bullet implements Runnable {
         public void resultReceived(IPendingServiceCall call) {
             ObjectMap<?, ?> map = (ObjectMap<?, ?>) call.getResult();
             String code = (String) map.get("code");
+            System.out.printf("connectCallback: (code #%s)\n", code);
             // Server connection established, but issue in connection.
             if (StatusCodes.NC_CONNECT_FAILED.equals(code) || StatusCodes.NC_CONNECT_REJECTED.equals(code) || StatusCodes.NC_CONNECT_INVALID_APPLICATION.equals(code)) {
                 if (completed.compareAndSet(false, true)) {
-                    dispose();
+                	System.out.printf("completeHandler? #%1$b\n", completeHandler);
                     if (completeHandler != null) {
                         completeHandler.OnBulletComplete();
                     }
+                    dispose();
                 }
             }
             // If connection successful, establish a stream
