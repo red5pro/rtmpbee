@@ -111,7 +111,7 @@ This will run an attack with `100` stingers (a.k.a, subscription streams) for `6
 
 ## Stream Manager API
 
-For the Stream Manager example, it is important to note that the insecure IP address is required. If you are serving your Stream Manager over SSL, the RTSP bee cannot properly use its API due to security restrictions. _It is possible to resolve these security issues in the future, if you download and store the cert in your Java install, [https://stackoverflow.com/questions/21076179/pkix-path-building-failed-and-unable-to-find-valid-certification-path-to-requ](https://stackoverflow.com/questions/21076179/pkix-path-building-failed-and-unable-to-find-valid-certification-path-to-requ)._
+For the Stream Manager example, it is important to note that the insecure IP address is required. If you are serving your Stream Manager over SSL, the RTMP bee cannot properly use its API due to security restrictions. _It is possible to resolve these security issues in the future, if you download and store the cert in your Java install, [https://stackoverflow.com/questions/21076179/pkix-path-building-failed-and-unable-to-find-valid-certification-path-to-requ](https://stackoverflow.com/questions/21076179/pkix-path-building-failed-and-unable-to-find-valid-certification-path-to-requ)._
 
 [![Analytics](https://ga-beacon.appspot.com/UA-59819838-3/red5pro/rtmpbee?pixel)](https://github.com/igrigorik/ga-beacon)
 
