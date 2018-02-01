@@ -166,9 +166,9 @@ public class Red5Bee implements IBulletCompleteHandler, IBulletFailureHandler {
 
     @Override
     public void OnBulletFireFail() {
-        System.out.println("Failure for bullet to fire. Possible missing endpoint. Accessing a new endpoint from stream manager.");
         // If is an streammanager-based call, we may need to re-access on a test where the server went down.
         if (this.streamManagerURL != null) {
+        	System.out.println("Failure for bullet to fire. Possible missing endpoint. Accessing a new endpoint from stream manager.");
             try {
                 modifyEndpointProperties(this.streamManagerURL);
                 // build a bullet
@@ -180,6 +180,13 @@ public class Red5Bee implements IBulletCompleteHandler, IBulletFailureHandler {
             } catch (Exception e) {
                 System.out.printf("Could not refire bullet with Stream Manager Endpoint URL: %s\n.", this.streamManagerURL);
                 e.printStackTrace();
+            }
+        }
+        else {
+        	int remaining = bulletsRemaining.decrementAndGet();
+            if (remaining <= 0) {
+                System.out.println("All bullets expended. Bye Bye.");
+                System.exit(1);
             }
         }
     }
@@ -269,7 +276,8 @@ public class Red5Bee implements IBulletCompleteHandler, IBulletFailureHandler {
         else if (args.length < 5) {
             System.out.printf("Incorrect number of args, please pass in the following: \n  " + "\narg[0] = IP Address" + "\narg[1] = port" + "\narg[2] = app" + "\narg[3] = streamName" + "\narg[4] = numBullets");
             return;
-        } else {
+        }
+        else {
             System.out.println("Determined its an original attack...");
             url = args[0];
             port = Integer.parseInt(args[1]);
