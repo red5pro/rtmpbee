@@ -71,7 +71,6 @@ public class Red5Bee implements IBulletCompleteHandler, IBulletFailureHandler {
         this.streamManagerURL = streamManagerURL;
         this.numBullets = numBullets;
         this.timeout = timeout;
-        modifyEndpointProperties(this.streamManagerURL);
     }
 
     /**
@@ -146,10 +145,16 @@ public class Red5Bee implements IBulletCompleteHandler, IBulletFailureHandler {
         // load our bullets into the gun
         for (int i = 0; i < numBullets; i++) {
             // build a bullet
-            Bullet bullet = Bullet.Builder.build((i + 1), url, port, application, streamName, timeout);
-            bullet.setCompleteHandler(this);
-            bullet.setFailHandler(this);
-            machineGun.put(i, bullet);
+        	try {
+        		modifyEndpointProperties(this.streamManagerURL);
+        		Bullet bullet = Bullet.Builder.build((i + 1), url, port, application, streamName, timeout);
+        		bullet.setCompleteHandler(this);
+        		bullet.setFailHandler(this);
+        		machineGun.put(i, bullet);
+        	}
+        	catch (Exception e) {
+        		System.out.printf("[WARNING] Could not assemble bullet for firing: %s\n", e.getMessage());
+        	}
         }
     }
 
@@ -278,7 +283,7 @@ public class Red5Bee implements IBulletCompleteHandler, IBulletFailureHandler {
             return;
         }
         else {
-            System.out.println("Determined its an original attack...");
+            System.out.println("Determined its an original attack...\n");
             url = args[0];
             port = Integer.parseInt(args[1]);
             application = args[2];
