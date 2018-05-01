@@ -146,7 +146,9 @@ public class Red5Bee implements IBulletCompleteHandler, IBulletFailureHandler {
         for (int i = 0; i < numBullets; i++) {
             // build a bullet
         	try {
-        		modifyEndpointProperties(this.streamManagerURL);
+        		if (this.streamManagerURL != null) {
+        			modifyEndpointProperties(this.streamManagerURL);
+        		}
         		Bullet bullet = Bullet.Builder.build((i + 1), url, port, application, streamName, timeout);
         		bullet.setCompleteHandler(this);
         		bullet.setFailHandler(this);
