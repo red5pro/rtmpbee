@@ -9,7 +9,7 @@
     <url>http://infrared5.com</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <red5.version>1.0.10-M4</red5.version>
+        <red5.version>1.0.10-M7</red5.version>
         <spring.version>4.2.3.RELEASE</spring.version>
         <mina.version>2.0.14</mina.version>
         <slf4j.version>1.7.9</slf4j.version>
