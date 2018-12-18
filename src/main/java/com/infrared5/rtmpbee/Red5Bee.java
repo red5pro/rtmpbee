@@ -25,7 +25,7 @@ public class Red5Bee implements IBulletCompleteHandler, IBulletFailureHandler {
     private static ScheduledExecutorService executor = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors() * 8);
 
     private String url;
-
+private String thing;
     private int port;
 
     private String application;
