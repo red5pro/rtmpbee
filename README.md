@@ -18,6 +18,12 @@ Built using **Java 8 JDK**
 
 # Building
 
+First run the `setup` script:
+
+```sh
+./setup.sh
+```
+
 ## Eclipse
 
 > Preferred, as the Maven build has issues with Bouncy Castle
