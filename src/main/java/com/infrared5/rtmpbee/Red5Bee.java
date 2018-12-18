@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 
 public class Red5Bee implements IBulletCompleteHandler, IBulletFailureHandler {
 
-	private static String VERSION = "4.1.1";
+	private static String VERSION = "4.1.0";
 	
     // instance a scheduled executor, using a core size based on cpus
     private static ScheduledExecutorService executor = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors() * 8);
@@ -53,8 +53,7 @@ public class Red5Bee implements IBulletCompleteHandler, IBulletFailureHandler {
      * @param timeout
      */
     public Red5Bee(String url, int port, String application, String streamName, int numBullets, int timeout) {
-    	System.out.printf("Running RTMPBees %s.\n", VERSION);
-        this.url = url;
+    	this.url = url;
         this.port = port;
         this.application = application;
         this.streamName = streamName;
@@ -71,8 +70,7 @@ public class Red5Bee implements IBulletCompleteHandler, IBulletFailureHandler {
      * @param timeout
      */
     public Red5Bee(String streamManagerURL, int numBullets, int timeout) throws Exception {
-    	System.out.printf("Running RTMPBees %s.\n", VERSION);
-        this.streamManagerURL = streamManagerURL;
+    	this.streamManagerURL = streamManagerURL;
         this.numBullets = numBullets;
         this.timeout = timeout;
     }
@@ -252,6 +250,7 @@ public class Red5Bee implements IBulletCompleteHandler, IBulletFailureHandler {
      * @throws InterruptedException
      */
     public static void main(String[] args) throws InterruptedException {
+    	System.out.printf("Running RTMPBees %s.\n", VERSION);
         System.out.printf("Number of arguments: %d.\n", args.length);
         // app args
         String url;
@@ -269,7 +268,7 @@ public class Red5Bee implements IBulletCompleteHandler, IBulletFailureHandler {
             return;
         } 
         else if (args.length >= 3 && args.length <= 4) {
-            System.out.printf("Determined its a stream manager attack...");
+            System.out.printf("Determined its a stream manager attack...\n");
             url = args[0].toString().trim();
             port = Integer.parseInt(args[1]);
             numBullets = Integer.parseInt(args[2]);
