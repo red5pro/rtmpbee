@@ -2,7 +2,7 @@
 
 echo "Running pre-commit..."
 
-version=$(git blame -L 22,+1 -- ../../src/main/java/com/infrared5/rtmpbee/Red5Bee.java)
+version=$(git blame -L 22,+1 -- src/main/java/com/infrared5/rtmpbee/Red5Bee.java)
 echo $version
 
 if ! echo $version | grep -e "^0000"; then
