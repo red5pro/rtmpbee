@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Running pre-commit..."
+
 version=$(git blame -L 22,+1 -- ../../src/main/java/com/infrared5/rtmpbee/Red5Bee.java)
 echo $version
 
