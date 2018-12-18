@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 
 public class Red5Bee implements IBulletCompleteHandler, IBulletFailureHandler {
 
-	private static String VERSION = "4.1.0";
+	private static String VERSION = "4.2.0";
 	
     // instance a scheduled executor, using a core size based on cpus
     private static ScheduledExecutorService executor = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors() * 8);
