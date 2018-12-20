@@ -18,6 +18,12 @@ Built using **Java 8 JDK**
 
 # Building
 
+First run the `setup` script:
+
+```sh
+./setup.sh
+```
+
 ## Eclipse
 
 > Preferred, as the Maven build has issues with Bouncy Castle
@@ -102,10 +108,10 @@ The amount of time to subscribe to stream. _The actual subscription time may dif
 #### Example
 
 ```ssh
-$ java -jar rtmpbee.jar "http://xxx.xxx.xxx.xxx:5080/streammanager/api/2.0/event/live/mystream?action=subscribe" 1935 100 60
+$ java -jar rtmpbee.jar "http://xxx.xxx.xxx.xxx:5080/streammanager/api/3.1/event/live/mystream?action=subscribe" 1935 100 60
 ```
 
-This will run an attack with `100` stingers (a.k.a, subscription streams) for `60` seconds each, consuming the `mystream` stream at the Edge server address returned from the Stream Manager API call to `http://xxx.xxx.xxx.xxx:5080/streammanager/api/2.0/event/live/mystream?action=subscribe`.
+This will run an attack with `100` stingers (a.k.a, subscription streams) for `60` seconds each, consuming the `mystream` stream at the Edge server address returned from the Stream Manager API call to `http://xxx.xxx.xxx.xxx:5080/streammanager/api/3.1/event/live/mystream?action=subscribe`.
 
 # Notes
 
